@@ -1,26 +1,26 @@
-# recalled
+# @recalled/sdk
 
 Audit logs as a Service. Record every action in your product in 3 lines of code, stay compliant with SOC2, ISO 27001 and GDPR.
 
 - Tiny, zero-dependency, TypeScript-first
 - Works in Node 18+, Bun, Deno, browser, edge runtimes
-- Optional React component `<RecalledFeed />` to embed a live audit log view in your app
+- Optional React component `<RecalledFeed />` to drop a live audit log view inside your own admin dashboard
 - [Français](./README-FR.md)
 
 ## Install
 
 ```bash
-npm install recalled
+npm install @recalled/sdk
 # or
-pnpm add recalled
+pnpm add @recalled/sdk
 # or
-yarn add recalled
+yarn add @recalled/sdk
 ```
 
 ## Quick start
 
 ```ts
-import { Recalled } from "recalled";
+import { Recalled } from "@recalled/sdk";
 
 const client = new Recalled({
   apiKey: process.env.RECALLED_API_KEY!,
@@ -119,7 +119,7 @@ const result = await client.actors.delete({
 
 ## Embed tokens
 
-Issue short-lived tokens that let you embed a scoped view of the audit log in another app without exposing your API key.
+Issue short-lived tokens that let you embed a scoped view of the audit log in your own admin dashboard without exposing your API key.
 
 ```ts
 const { token, expiresAt } = await client.embed.createToken({
@@ -132,12 +132,14 @@ Pass the `token` to the `<RecalledFeed />` React component below.
 
 ## React embed component
 
-Install `react` and `react-dom` in your project. Import from `recalled/react`.
+`<RecalledFeed />` is meant for **your own admin dashboard**, the internal tool you and your team use to operate your product. It is an internal observability widget, not a white-label component to resell to your customers.
+
+Install `react` and `react-dom` in your project. Import from `@recalled/sdk/react`.
 
 ```tsx
-import { RecalledFeed } from "recalled/react";
+import { RecalledFeed } from "@recalled/sdk/react";
 
-export default function CustomerAuditPage() {
+export default function AdminAuditPage({ embedToken }: { embedToken: string }) {
   return (
     <RecalledFeed
       embedToken={embedToken}
@@ -236,7 +238,7 @@ Every color, font, border and radius is a prop. No CSS file to import.
 All errors thrown by the SDK are `RecalledError` instances with a stable `code`:
 
 ```ts
-import { Recalled, RecalledError, isRecalledError } from "recalled";
+import { Recalled, RecalledError, isRecalledError } from "@recalled/sdk";
 
 try {
   await client.events.create({ action: "test" });

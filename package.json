@@ -1,7 +1,7 @@
 {
-  "name": "recalled",
+  "name": "@recalled/sdk",
   "version": "0.1.0",
-  "description": "Audit logs as a Service. Record every action in your product.",
+  "description": "Official TypeScript SDK for Recalled — audit logs as a service for your product.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -61,19 +61,24 @@
     "gdpr",
     "rgpd",
     "logging",
+    "observability",
     "security",
     "saas",
     "typescript",
-    "react"
+    "react",
+    "recalled"
   ],
   "homepage": "https://recalled.dev",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Recalled-dev/sdk-recalled"
+    "url": "git+https://github.com/Recalled-dev/recalled-js.git"
   },
   "bugs": {
-    "url": "https://github.com/Recalled-dev/sdk-recalled/issues"
+    "url": "https://github.com/Recalled-dev/recalled-js/issues"
   },
-  "author": "Recalled",
-  "license": "MIT"
+  "author": "Recalled <contact@recalled.dev>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
 }
