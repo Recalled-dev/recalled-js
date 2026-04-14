@@ -262,6 +262,7 @@ try {
 | `NETWORK_ERROR` | TCP/DNS/connection failure. |
 | `TIMEOUT` | Request took longer than `timeoutMs`. |
 | `INTERNAL_ERROR` | Server error. Retry with backoff. |
+| `UNKNOWN_ERROR` | Unexpected error the SDK could not classify. |
 
 ## Compatibility
 
