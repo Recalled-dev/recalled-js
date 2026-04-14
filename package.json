@@ -1,0 +1,79 @@
+{
+  "name": "recalled",
+  "version": "0.1.0",
+  "description": "Audit logs as a Service. Record every action in your product.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js",
+      "require": "./dist/react/index.cjs"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README-FR.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-dom": { "optional": true }
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "audit-log",
+    "audit-trail",
+    "compliance",
+    "soc2",
+    "iso27001",
+    "gdpr",
+    "rgpd",
+    "logging",
+    "security",
+    "saas",
+    "typescript",
+    "react"
+  ],
+  "homepage": "https://recalled.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Recalled-dev/sdk-recalled"
+  },
+  "bugs": {
+    "url": "https://github.com/Recalled-dev/sdk-recalled/issues"
+  },
+  "author": "Recalled",
+  "license": "MIT"
+}
