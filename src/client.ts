@@ -6,7 +6,7 @@ import { EmbedResource } from "./resources/embed.js";
 
 const DEFAULT_BASE_URL = "https://api.recalled.dev/v1";
 const DEFAULT_TIMEOUT = 10_000;
-const SDK_VERSION = "0.1.1";
+const SDK_VERSION = "0.1.2";
 
 export type RecalledOptions = {
   apiKey: string;

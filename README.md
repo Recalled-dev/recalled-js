@@ -4,7 +4,7 @@ Audit logs as a Service. Record every action in your product in 3 lines of code,
 
 - Tiny, zero-dependency, TypeScript-first
 - Works in Node 18+, Bun, Deno, browser, edge runtimes
-- Optional React component `<RecalledFeed />` to drop a live audit log view inside your own admin dashboard
+- Optional React component `<RecalledFeed />` — an internal admin widget you drop inside the back-office your support, ops and compliance team already use
 - [Français](./README-FR.md)
 
 ## Install
@@ -119,27 +119,40 @@ const result = await client.actors.delete({
 
 ## Embed tokens
 
-Issue short-lived tokens that let you embed a scoped view of the audit log in your own admin dashboard without exposing your API key.
+Short-lived, browser-safe credentials for the `<RecalledFeed />` admin widget. Mint them on your server (where the API key lives) and pass only the token to the browser — your key never leaves the backend.
 
 ```ts
+// Admin-wide: the widget sees every event in the project, across every tenant.
 const { token, expiresAt } = await client.embed.createToken({
-  organization: "org_xyz",
   ttlSeconds: 3600,
 });
 ```
 
-Pass the `token` to the `<RecalledFeed />` React component below.
+Need to drill into a single tenant? Pass an `organization` and the token is narrowed to that tenant only:
 
-## React embed component
+```ts
+// Scoped: only events tagged with organization "org_xyz"
+const { token } = await client.embed.createToken({
+  organization: "org_xyz",
+  ttlSeconds: 900,
+});
+```
 
-`<RecalledFeed />` is meant for **your own admin dashboard**, the internal tool you and your team use to operate your product. It is an internal observability widget, not a white-label component to resell to your customers.
+Either way, pass the resulting `token` to the `<RecalledFeed />` component below.
+
+## React embed component — admin widget
+
+`<RecalledFeed />` is an **internal observability widget**. You drop it inside the **admin panel, support console, or back-office your team already uses to operate the product** — so your support, ops, SRE and compliance people can investigate "who did what" without ever leaving their workflow.
+
+It is **not** a customer-facing component. The end users of your SaaS never see Recalled directly. Keep the widget behind whatever admin auth you already have.
 
 Install `react` and `react-dom` in your project. Import from `@recalled/sdk/react`.
 
 ```tsx
+// inside your own admin dashboard / support console
 import { RecalledFeed } from "@recalled/sdk/react";
 
-export default function AdminAuditPage({ embedToken }: { embedToken: string }) {
+export default function AdminAuditLogPage({ embedToken }: { embedToken: string }) {
   return (
     <RecalledFeed
       embedToken={embedToken}

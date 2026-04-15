@@ -83,8 +83,15 @@ export type DeleteActorResult = {
 };
 
 export type CreateEmbedTokenParams = {
+  /**
+   * Optional tenant filter. When set, the embed feed only shows events tagged
+   * with this organization id. Leave undefined for the default admin view —
+   * every event in the project, across every tenant.
+   */
   organization?: string;
+  /** Token lifetime in seconds. Server picks a sensible default when omitted. */
   ttlSeconds?: number;
+  /** Reserved for forward compatibility. */
   scopes?: string[];
 };
 

@@ -1,3 +1,20 @@
+// <RecalledFeed /> — an internal admin widget.
+//
+// Drop this component inside the admin panel, support console or back-office
+// that your team uses to operate the product. It renders a live feed of the
+// project's audit events (search, filters, pagination) so your support, ops,
+// SRE and compliance people can investigate "who did what" without leaving
+// their workflow to open the Recalled dashboard.
+//
+// It is NOT a customer-facing component: the end users of your SaaS never
+// interact with it. Keep it behind whatever admin auth you already use.
+//
+// The widget is driven by a short-lived `embedToken` minted server-side via
+// `client.embed.createToken()`. By default the token — and therefore the
+// widget — has access to every event in the project, across every tenant.
+// Pass `organization` to `createToken` if you want to narrow a given widget
+// instance down to a single tenant.
+
 import { useMemo, useState } from "react";
 import type { Event } from "../types.js";
 import { useEmbedEvents } from "./hooks.js";
