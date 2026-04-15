@@ -1,6 +1,6 @@
 {
   "name": "@recalled/sdk",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Official TypeScript SDK for Recalled — audit logs as a service for your product.",
   "type": "module",
   "main": "./dist/index.cjs",

@@ -89,11 +89,19 @@ export class HttpClient {
       if (res.ok) {
         if (res.status === 204) return undefined as T;
         const json = (await res.json().catch(() => null)) as {
-          data?: T;
+          data?: unknown;
           nextCursor?: string | null;
         } | null;
         if (json && "data" in json) {
-          return { data: json.data, nextCursor: json.nextCursor ?? null } as T;
+          // Distinguish list responses (wrap as { data, nextCursor }) from
+          // single-object responses (unwrap to `data` directly). A response
+          // is a list when `data` is an array OR the envelope carries a
+          // `nextCursor` field — list endpoints always set it, even on the
+          // last page where it is `null`.
+          if (Array.isArray(json.data) || "nextCursor" in json) {
+            return { data: json.data, nextCursor: json.nextCursor ?? null } as T;
+          }
+          return json.data as T;
         }
         return (json ?? undefined) as T;
       }

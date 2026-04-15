@@ -2,6 +2,7 @@ export { Recalled } from "./client.js";
 export { RecalledError, isRecalledError } from "./errors.js";
 
 export type { RecalledOptions } from "./client.js";
+export type { ResilienceOptions, QueueDropReason } from "./queue.js";
 export type {
   Actor,
   EventTarget,
