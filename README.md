@@ -51,7 +51,9 @@ const client = new Recalled({
 
 ## Events
 
-### Create
+### Create (strict, throws on failure)
+
+Call `create()` when you want the audit log to be part of the request's success condition — i.e. if Recalled is unreachable, your handler should return a 500 and the whole operation should fail.
 
 ```ts
 const event = await client.events.create({
@@ -73,6 +75,98 @@ const event = await client.events.create({
   },
 });
 ```
+
+Throws `RecalledError` on any failure (network, timeout, validation, etc).
+
+### Emit (resilient, recommended)
+
+Call `emit()` when you don't want a transient API outage to bubble up as an exception in your request path — which is almost always what you want for audit logs.
+
+`emit()` returns immediately and delivery happens in the background. If the API is unreachable, events are held in an **in-memory queue** and retried automatically with exponential backoff for up to 24 hours. Your handler never sees the failure.
+
+```ts
+client.events.emit({
+  action: "invoice.paid",
+  actor: { id: "user_123", email: "alice@example.com" },
+  organization: "org_xyz",
+  metadata: { amount: 4200, currency: "eur" },
+});
+// returns immediately, delivery happens in the background
+```
+
+`emit()` never throws. Delivery outcomes are exposed through callbacks passed to the constructor:
+
+```ts
+const client = new Recalled({
+  apiKey: process.env.RECALLED_API_KEY!,
+  resilience: {
+    onDelivered: (input, event) => {
+      // Event reached the API successfully.
+    },
+    onError: (err, input) => {
+      // A delivery attempt failed. The SDK will retry automatically
+      // unless the error is fatal (auth, validation, not found, quota).
+    },
+    onDrop: (input, reason, err) => {
+      // Event dropped without reaching the API. Forward to your own
+      // logger (Sentry, Datadog, file) so no audit entry is lost.
+      // reason is one of: "ttl_expired" | "fatal_error" | "queue_full"
+    },
+  },
+});
+```
+
+### Flush before exit
+
+For short-lived processes (CLI, cron, Lambda), call `client.flush()` before exiting to give the queue a chance to drain. Otherwise any events still pending are lost when the process terminates.
+
+```ts
+async function main() {
+  client.events.emit({ action: "job.started" });
+  await doWork();
+  client.events.emit({ action: "job.completed" });
+  await client.flush(); // wait up to 30s for pending events to deliver
+}
+```
+
+`flush(timeoutMs?)` defaults to 30 seconds and resolves early if the queue drains first.
+
+### Resilience options
+
+The resilience layer is enabled by default with sensible defaults. Override only what you need:
+
+```ts
+const client = new Recalled({
+  apiKey: process.env.RECALLED_API_KEY!,
+  resilience: {
+    maxQueueSize: 5000,            // events held in memory (default: 5000)
+    maxAgeMs: 24 * 60 * 60 * 1000, // TTL before drop (default: 24h)
+    minBackoffMs: 1000,            // first retry delay (default: 1s)
+    maxBackoffMs: 10 * 60 * 1000,  // backoff cap (default: 10min)
+    onDelivered, onError, onDrop,  // optional callbacks
+  },
+});
+```
+
+Pass `resilience: false` to disable buffering entirely. `emit()` then becomes a raw fire-and-forget with errors swallowed.
+
+```ts
+const client = new Recalled({
+  apiKey: process.env.RECALLED_API_KEY!,
+  resilience: false,
+});
+```
+
+### `create` vs `emit` cheat sheet
+
+| | `create()` | `emit()` |
+|---|---|---|
+| Return | `Promise<Event>` | `void` |
+| Throws on failure | yes | no |
+| Buffers on outage | no | yes |
+| Retries after 24h timeout | no | yes, with backoff |
+| Blocks your request path | yes | no |
+| Use when | failure must surface | failure should be invisible |
 
 ### List
 
