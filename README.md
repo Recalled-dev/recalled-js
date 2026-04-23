@@ -1,6 +1,6 @@
 # @recalled/sdk
 
-Audit logs as a Service. Record every action in your product in 3 lines of code, stay compliant with SOC2, ISO 27001 and GDPR.
+Audit logs as a Service. Record every action in your product in 3 lines of code — the hassle-free alternative to your homegrown `activity_logs` table. Searchable, exportable, and compliance-ready (SOC2, ISO 27001, GDPR) if you ever need it.
 
 - Tiny, zero-dependency, TypeScript-first
 - Works in Node 18+, Bun, Deno, browser, edge runtimes

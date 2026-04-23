@@ -1,6 +1,6 @@
 # @recalled/sdk
 
-Les logs d'audit en SaaS. Enregistre chaque action de ton produit en 3 lignes de code, reste conforme SOC2, ISO 27001 et RGPD.
+Les logs d'audit en SaaS. Enregistre chaque action de ton produit en 3 lignes de code — l'alternative clé en main à ta table `activity_logs` maison. Searchable, exportable, et conforme SOC2, ISO 27001 et RGPD si tu en as besoin un jour.
 
 - Petit, zéro dépendance, TypeScript-first
 - Fonctionne en Node 18+, Bun, Deno, navigateur, edge runtimes
