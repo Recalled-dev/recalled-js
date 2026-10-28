@@ -83,7 +83,7 @@
   "bugs": {
     "url": "https://github.com/Recalled-dev/recalled-js/issues"
   },
-  "author": "Recalled <contact@recalled.dev>",
+  "author": "Pierre Debski (dkp-consult) <contact@recalled.dev>",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
